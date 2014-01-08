@@ -2,6 +2,7 @@
 using System.IO;
 using ObjLoader.Loader.Data.DataStore;
 using ObjLoader.Loader.TypeParsers.Interfaces;
+using ObjLoader.Loader.Common;
 
 namespace ObjLoader.Loader.Loaders
 {
@@ -58,8 +59,20 @@ namespace ObjLoader.Loader.Loaders
         public LoadResult Load(Stream lineStream)
         {
             StartLoad(lineStream);
-
+            if (ContextInfo.DirectoryName == null)
+                ContextInfo.DirectoryName = "";
             return CreateResult();
+        }
+
+        //Addition to workaround some issues I'm having with Unity and getting to files
+        //outside of their limits.  See if this works...
+        //Peter Bartosch
+        public LoadResult Load(string filePath)
+        {
+            FileStream lineStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            if(!StringExtensions.IsNullOrWhiteSpace(filePath))
+                ContextInfo.DirectoryName = Path.GetDirectoryName(filePath);
+            return Load(lineStream);
         }
 
         private LoadResult CreateResult()

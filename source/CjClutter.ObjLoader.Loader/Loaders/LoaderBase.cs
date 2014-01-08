@@ -1,4 +1,5 @@
 using System.IO;
+using ObjLoader.Loader.Common;
 
 namespace ObjLoader.Loader.Loaders
 {
@@ -19,8 +20,8 @@ namespace ObjLoader.Loader.Loaders
         private void ParseLine()
         {
             var currentLine = _lineStreamReader.ReadLine();
-
-            if (string.IsNullOrWhiteSpace(currentLine) || currentLine[0] == '#')
+            
+            if (StringExtensions.IsNullOrWhiteSpace(currentLine) || currentLine[0] == '#')
             {
                 return;
             }
